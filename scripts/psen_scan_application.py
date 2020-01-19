@@ -21,7 +21,6 @@ import math
 import rospy
 from std_srvs.srv import Trigger
 import threading
-from sensor_msgs.msg import LaserScan
 
 __REQUIRED_API_VERSION__ = "1"
 
@@ -58,17 +57,12 @@ def _resume_callback(request):
     r.resume()
     return [True, "success"]
 
-def _laser_scan_callback(msg):
-    for index in range(0, 900):
-        if msg.ranges[index] < 0.5:
-            r.pause()
-
 # The path A
 def start_program(r):
     print("Executing " + __file__)
 
     # Move to start point 
-    r.move(Ptp(goal=home_pos, vel_scale=__MOVE_VELOCITY__))  
+    r.parallelMove(Ptp(goal=home_pos, vel_scale=__MOVE_VELOCITY__))  
 
     # Simple ptp and lin movement
     while not rospy.is_shutdown():
@@ -85,7 +79,6 @@ if __name__ == "__main__":
 
     r = HackRobot(__REQUIRED_API_VERSION__)
 
-    rospy.Subscriber('/laser_scanner/scan', LaserScan, _laser_scan_callback)
     pause_service = rospy.Service("move_path_B", Trigger, _pause_callback)
     resume_service = rospy.Service("continue_move_path_A", Trigger, _resume_callback)
 
