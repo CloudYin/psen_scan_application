@@ -27,7 +27,7 @@ limitations under the License.
 
     <!-- Send urdf to parameter server -->
     <param name="robot_description"
-           command="$(find xacro)/xacro --inorder '$(find psen_scan_application)/urdf/robot_application_model.xacro'" />
+           command="$(find xacro)/xacro '$(find psen_scan_application)/urdf/robot_application_model.xacro'" />
 
     <!-- Start RViz visualization. Comment this on headless hardware, if you just want to run the driver -->
     <include file="$(find prbt_moveit_config)/launch/moveit_rviz.launch">
