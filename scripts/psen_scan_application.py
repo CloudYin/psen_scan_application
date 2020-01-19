@@ -29,14 +29,14 @@ __REQUIRED_API_VERSION__ = "1"
 # A1: 0, A2: 0, A3: 90, A4: 0, A5: 90, A6: 0
 home_pos = [0, 0, math.radians(90), 0, math.radians(90), math.radians(-45)]
 
-__MOVE_VELOCITY__ = 0.2  # velocity of the robot
-__LIN_VELOCITY__ = 0.2 # velocity of pick and place
+__MOVE_VELOCITY__ = 0.2  # PTP velocity
+__LIN_VELOCITY__ = 0.2 # LIN velocity
 
 r = None
 
 class HackRobot(Robot):
     def parallelMove(self, cmd):
-	    self._sequence_client.send_goal(cmd._get_sequence_request(self))
+	self._sequence_client.send_goal(cmd._get_sequence_request(self))
         self._sequence_client.wait_for_result()
 
 def _pause_callback(request):
