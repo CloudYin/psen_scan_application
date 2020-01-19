@@ -47,7 +47,7 @@ def _pause_callback(request):
     rospy.sleep(.3)
 
     # Your motion command
-    r.move(Ptp(goal=home_pos, vel_scale=__MOVE_VELOCITY__))
+    r.parallelMove(Ptp(goal=home_pos, vel_scale=__MOVE_VELOCITY__))
 
     pause_thread.join()
     return [True, "success"]
