@@ -1,0 +1,128 @@
+<?xml version="1.0" ?>
+
+<robot name="prbt" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- macro definition of pilz lwa -->
+  <xacro:include filename="$(find prbt_support)/urdf/prbt_macro.xacro" />
+
+  <!-- coloring from the stl file -->
+  <material name="yellow">
+    <color rgba="1 1 0 1"/>
+  </material>
+
+  <!-- coloring from the table -->
+  <material name="grey">
+    <color rgba="0.75 0.75 0.75 1"/>
+  </material>
+
+  <!-- instantiate the robot -->
+  <xacro:prbt prefix="prbt_"/>
+
+  <!-- link definition -->
+  <link name="table">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.006"/>
+      <geometry>
+        <box size="1.1 0.67 0.01"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.006"/>
+      <geometry>
+        <box size="1.1 0.67 0.01"/>
+      </geometry>
+    </collision>
+
+    <!-- Move space limitation -->
+    <!-- Left -->
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.55 0 0.595"/>
+      <geometry>
+        <box size="0.04 0.67 1.19"/>
+      </geometry>
+    </collision>
+
+    <!-- Right -->
+    <collision>
+      <origin rpy="0 0 0" xyz="0.55 0 0.595"/>
+      <geometry>
+        <box size="0.04 0.67 1.19"/>
+      </geometry>
+    </collision>
+
+    <!-- Back -->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.335 0.595"/>
+      <geometry>
+        <box size="1.1 0.04 1.19"/>
+      </geometry>
+    </collision>
+
+    <!-- Front -->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.335 0.595"/>
+      <geometry>
+        <box size="1.1 0.04 1.19"/>
+      </geometry>
+    </collision>
+
+    <!-- Top -->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 1.19"/>
+      <geometry>
+        <box size="1.1 0.67 0.02"/>
+      </geometry>
+    </collision>
+
+  </link>
+
+  <!-- <link name="tray">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.2 0 0.01"/>
+      <geometry>
+        <box size="0.5 0.5 0.025"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.2 0 0.01"/>
+      <geometry>
+        <box size="0.5 0.5 0.025"/>
+      </geometry>
+    </collision>
+  </link> -->
+
+  <link name="prbt_tcp"/>
+
+  <!-- <joint name="tray_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="table"/>
+    <child link="tray"/>
+  </joint> -->
+
+  <joint name="table_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.26 -0.045 0"/>
+    <parent link="table"/>
+    <child link="prbt_base_link"/>
+  </joint>
+
+  <!-- connect the added tcp and the flange with a joint -->
+  <joint name="prbt_fixed_joint_tcp" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.05"/>
+    <parent link="prbt_flange"/>
+    <child link="prbt_tcp"/>
+  </joint>
+
+
+  <!-- add PG70 gripper with cuboid brackets of configurable size -->
+  
+  <xacro:include filename="$(find prbt_pg70_support)/urdf/pg70.urdf.xacro" />
+  <xacro:prbt_gripper gripper_name="prbt_gripper" parent="prbt_flange" />
+  
+  <xacro:include filename="$(find prbt_support)/urdf/simple_gripper_brackets.urdf.xacro" />
+  <xacro:simple_gripper_brackets gripper_name="prbt_gripper" size_y="0.003" size_z="0.055" />
+  
+
+</robot>

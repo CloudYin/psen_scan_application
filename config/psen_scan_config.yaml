@@ -1,0 +1,7 @@
+password: "ac0d68d033"
+sensor_ip: "169.254.60.20"
+host_ip: "169.254.60.99"
+host_udp_port: 55000
+angle_start: 47.5
+angle_end: 227.5
+skip: 0
