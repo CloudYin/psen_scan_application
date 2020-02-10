@@ -14,14 +14,12 @@ def laser_scan_callback(msg):
     # If distance < 0.5m, call "move_path_B" service
     # Else, call "continue_move_path_A" service
     if min(msg.ranges) < 0.5:
-        print("Zone intruded")
         try:
             pause_trigger_response = pause_trigger()
             print("move path B trigger: " + str(pause_trigger_response.message))
         except rospy.ServiceException:
             print("Service move_path_B call failed") 
     elif min(msg.ranges) >= 1:
-        print("Zone not intruded")
         try:
             resume_trigger_response = resume_trigger()
             print("move path A trigger: " + str(resume_trigger_response.message))
