@@ -9,22 +9,29 @@ import math
 pause_trigger = rospy.ServiceProxy('move_path_B', Trigger)
 resume_trigger = rospy.ServiceProxy('continue_move_path_A', Trigger)
 
+last_value = 0
+
 def laser_scan_callback(msg):
-    # In angle between 0 to 90 degree
-    # If distance < 0.5m, call "move_path_B" service
-    # Else, call "continue_move_path_A" service
-    if min(msg.ranges) < 0.5:
+    """
+    In angle between 0 to 90 degree
+    If distance < 0.5m, call "move_path_B" service
+    Else, call "continue_move_path_A" service
+    """
+
+    global last_value
+    if min(msg.ranges) <= 0.5 and last_value > 0.5:
         try:
             pause_trigger_response = pause_trigger()
             print("move path B trigger: " + str(pause_trigger_response.message))
         except rospy.ServiceException:
             print("Service move_path_B call failed") 
-    elif min(msg.ranges) >= 1:
+    if min(msg.ranges) > 0.5 and last_value <= 0.5:
         try:
             resume_trigger_response = resume_trigger()
             print("move path A trigger: " + str(resume_trigger_response.message))
         except rospy.ServiceException:
             print("Service continue_move_path_A call failed")
+    last_value = min(msg.ranges)
 
 
 if __name__ == "__main__":
